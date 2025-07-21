@@ -2,8 +2,7 @@
 
 import type { FC } from 'react';
 import Image from 'next/image';
-import { Loader2, Sparkles } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+import { Sparkles } from 'lucide-react';
 
 interface VideoPreviewProps {
   src: string | null | undefined;
@@ -12,14 +11,12 @@ interface VideoPreviewProps {
 
 const VideoPreview: FC<VideoPreviewProps> = ({ src, isLoading }) => {
   return (
-    <div className="w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden shadow-lg border border-border flex items-center justify-center">
+    <div className="w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden shadow-lg border border-border flex items-center justify-center relative">
       {isLoading ? (
-        <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-muted/20">
-           <div className="w-1/2 text-center">
-              <Loader2 className="w-12 h-12 mb-4 animate-spin mx-auto text-primary" />
-              <p className="font-headline text-lg">Generating Your Vision...</p>
-              <p className="text-sm mb-4">This may take a few moments. Great art requires patience.</p>
-              <Progress value={33} className="w-full" />
+        <div className="w-full h-full flex flex-col items-center justify-center text-white bg-black">
+           <div className="relative">
+              <div className="absolute inset-0 bg-white/30 blur-3xl rounded-full animate-pulse" />
+              <p className="relative text-lg font-light tracking-widest">Loading...</p>
            </div>
         </div>
       ) : src ? (
