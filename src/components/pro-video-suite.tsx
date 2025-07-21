@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import Header from '@/components/layout/header';
 import LeftPanel from '@/components/panels/left-panel';
@@ -17,10 +17,19 @@ import { useToast } from '@/hooks/use-toast';
 const ProVideoSuite: FC = () => {
   const { toast } = useToast();
   const [videoInfo, setVideoInfo] = useState<{ src: string, duration: number } | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 1500); // Show initial loading for 1.5 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const handleGenerate = async (prompt: string) => {
-    setIsLoading(true);
+    setIsGenerating(true);
     setVideoInfo(null);
     
     toast({
@@ -51,7 +60,7 @@ const ProVideoSuite: FC = () => {
         description: 'Something went wrong. Please check the console for details and try again.',
       });
     } finally {
-      setIsLoading(false);
+      setIsGenerating(false);
     }
   };
 
@@ -62,10 +71,10 @@ const ProVideoSuite: FC = () => {
       <main className="flex flex-1 overflow-hidden border-t border-border">
         {/* Desktop Layout */}
         <div className="hidden lg:flex flex-1 overflow-hidden">
-          <LeftPanel onGenerate={handleGenerate} isLoading={isLoading} />
+          <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} />
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
-                  <CenterPanel videoInfo={videoInfo} isLoading={isLoading} />
+                  <CenterPanel videoInfo={videoInfo} isLoading={isInitialLoading || isGenerating} />
                   <RightPanel />
               </div>
               <div className="h-[250px] flex flex-col border-t-2 border-border">
@@ -77,7 +86,7 @@ const ProVideoSuite: FC = () => {
 
         {/* Mobile/Tablet Layout */}
         <div className="lg:hidden flex-1 flex flex-col overflow-hidden">
-          <CenterPanel videoInfo={videoInfo} isLoading={isLoading} />
+          <CenterPanel videoInfo={videoInfo} isLoading={isInitialLoading || isGenerating} />
           <div className='p-2 border-t border-border'>
             <Sheet>
                 <SheetTrigger asChild>
@@ -91,7 +100,7 @@ const ProVideoSuite: FC = () => {
                         <SheetTitle>AI Studio Tools</SheetTitle>
                     </SheetHeader>
                     <div className="flex-1 overflow-y-auto">
-                        <LeftPanel onGenerate={handleGenerate} isLoading={isLoading} />
+                        <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} />
                         <RightPanel />
                         <div className="border-t-2 border-border">
                             <TimelineControls />
