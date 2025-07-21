@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'ProLaunch Video Suite',
-  description: 'Professional video creation and editing suite.',
+  title: 'Aetheria Studio | Next-Gen AI Video',
+  description: 'The future of cinematic AI video generation.',
 };
 
 export default function RootLayout({

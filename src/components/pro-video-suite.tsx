@@ -8,24 +8,26 @@ import CenterPanel from '@/components/panels/center-panel';
 import RightPanel from '@/components/panels/right-panel';
 
 const ProVideoSuite: FC = () => {
-  const [sceneTimestamps, setSceneTimestamps] = useState<number[]>([]);
   const [videoInfo, setVideoInfo] = useState<{ src: string, duration: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleScenesDetected = (timestamps: number[]) => {
-    setSceneTimestamps(timestamps);
+  const handleGenerate = () => {
+    setIsLoading(true);
+    setVideoInfo(null); // Clear previous video
+    // Simulate generation time
+    setTimeout(() => {
+      setVideoInfo({ src: '/generated-video.mp4', duration: 10 });
+      setIsLoading(false);
+    }, 4000);
   };
 
-  const handleVideoUpload = (src: string, duration: number) => {
-    setVideoInfo({ src, duration });
-    setSceneTimestamps([]); // Reset timestamps for new video
-  };
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground font-body overflow-hidden">
       <Header />
       <main className="flex flex-1 overflow-hidden border-t border-border">
-        <LeftPanel onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload} />
-        <CenterPanel videoInfo={videoInfo} sceneTimestamps={sceneTimestamps} />
+        <LeftPanel onGenerate={handleGenerate} isLoading={isLoading} />
+        <CenterPanel videoInfo={videoInfo} isLoading={isLoading} />
         <RightPanel />
       </main>
     </div>
