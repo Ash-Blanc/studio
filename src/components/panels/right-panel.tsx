@@ -117,7 +117,7 @@ const CinematographyControls = () => {
             </CardContent>
         </Card>
     );
-}
+};
 
 
 const RightPanel: FC = () => {
