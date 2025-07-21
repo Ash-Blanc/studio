@@ -64,6 +64,16 @@ const ProVideoSuite: FC = () => {
     }
   };
 
+  if (isInitialLoading) {
+    return (
+      <div className="fixed inset-0 bg-black flex items-center justify-center text-white">
+        <div className="relative">
+          <div className="absolute inset-0 bg-white/30 blur-3xl rounded-full animate-pulse" />
+          <p className="relative text-lg font-light tracking-widest">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground font-body overflow-hidden">
@@ -74,7 +84,7 @@ const ProVideoSuite: FC = () => {
           <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} />
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
-                  <CenterPanel videoInfo={videoInfo} isLoading={isInitialLoading || isGenerating} />
+                  <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
                   <RightPanel />
               </div>
               <div className="h-[250px] flex flex-col border-t-2 border-border">
@@ -86,7 +96,7 @@ const ProVideoSuite: FC = () => {
 
         {/* Mobile/Tablet Layout */}
         <div className="lg:hidden flex-1 flex flex-col overflow-hidden">
-          <CenterPanel videoInfo={videoInfo} isLoading={isInitialLoading || isGenerating} />
+          <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
           <div className='p-2 border-t border-border'>
             <Sheet>
                 <SheetTrigger asChild>
