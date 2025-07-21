@@ -2,16 +2,21 @@
 
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Plus, ArrowUp } from 'lucide-react';
+import { Bot, FileText, Grid, Plus, ArrowUp } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AiSceneDetector from '../ai-scene-detector';
+import TemplateLibrary from '../template-library';
 
 interface LeftPanelProps {
   onGenerate: (prompt: string) => void;
   isLoading: boolean;
+  onScenesDetected: (timestamps: number[]) => void;
+  onVideoUpload: (src: string, duration: number) => void;
 }
 
-const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
+const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({ onGenerate, isLoading }) => {
   const [prompt, setPrompt] = useState('');
 
   const handleGenerate = () => {
@@ -22,7 +27,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
   };
 
   return (
-    <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border p-4">
+    <div className="p-4 h-full flex flex-col">
        <div className="flex-1" />
        
        <div className="mt-auto">
@@ -52,6 +57,41 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
             </Button>
          </div>
        </div>
+    </div>
+  );
+};
+
+
+const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload }) => {
+  return (
+    <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border">
+      <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
+        <div className="p-2 border-b border-border">
+            <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="prompt">
+                <FileText className="w-4 h-4 mr-2" />
+                Script
+            </TabsTrigger>
+            <TabsTrigger value="templates">
+                <Grid className="w-4 h-4 mr-2" />
+                Templates
+            </TabsTrigger>
+            <TabsTrigger value="tools">
+                <Bot className="w-4 h-4 mr-2" />
+                AI Tools
+            </TabsTrigger>
+            </TabsList>
+        </div>
+        <TabsContent value="prompt" className="flex-1">
+          <GenerationPanel onGenerate={onGenerate} isLoading={isLoading} />
+        </TabsContent>
+        <TabsContent value="templates">
+            <TemplateLibrary />
+        </TabsContent>
+        <TabsContent value="tools">
+            <AiSceneDetector onScenesDetected={onScenesDetected} onVideoUpload={onVideoUpload}/>
+        </TabsContent>
+      </Tabs>
     </aside>
   );
 };

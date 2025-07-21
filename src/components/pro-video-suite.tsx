@@ -6,7 +6,7 @@ import Header from '@/components/layout/header';
 import LeftPanel from '@/components/panels/left-panel';
 import CenterPanel from '@/components/panels/center-panel';
 import RightPanel from '@/components/panels/right-panel';
-import IterationTimeline from '@/components/timeline/iteration-timeline';
+import Timeline from '@/components/timeline/timeline';
 import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -19,6 +19,8 @@ const ProVideoSuite: FC = () => {
   const [videoInfo, setVideoInfo] = useState<{ src: string, duration: number } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [clips, setClips] = useState<any[]>([]);
+  const [totalDuration, setTotalDuration] = useState(60);
 
   useEffect(() => {
     // Simulate initial asset loading
@@ -28,10 +30,28 @@ const ProVideoSuite: FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleScenesDetected = (timestamps: number[]) => {
+    // Process timestamps to create clips
+    console.log("Detected scene timestamps:", timestamps);
+    // You could create new clips based on these timestamps here
+  };
+
+  const handleVideoUpload = (src: string, duration: number) => {
+    setVideoInfo({ src, duration });
+    setTotalDuration(duration);
+    setClips([{
+      id: 'main-video',
+      start: 0,
+      duration: duration,
+      name: 'Uploaded Video',
+      track: 'video'
+    }]);
+  };
 
   const handleGenerate = async (prompt: string) => {
     setIsGenerating(true);
     setVideoInfo(null);
+    setClips([]);
     
     toast({
       title: '🚀 Generation Started',
@@ -40,10 +60,18 @@ const ProVideoSuite: FC = () => {
 
     try {
       const result = await generateVideo({ prompt });
-      // Create a temporary video element to get the duration
       const videoElement = document.createElement('video');
       videoElement.onloadedmetadata = () => {
-        setVideoInfo({ src: result.videoUrl, duration: videoElement.duration });
+        const duration = videoElement.duration;
+        setVideoInfo({ src: result.videoUrl, duration });
+        setTotalDuration(duration);
+        setClips([{
+          id: 'generated-video-1',
+          start: 0,
+          duration: duration,
+          name: prompt.substring(0, 30) + '...',
+          track: 'video',
+        }]);
       };
       videoElement.src = result.videoUrl;
 
@@ -79,20 +107,20 @@ const ProVideoSuite: FC = () => {
 
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground font-body overflow-hidden">
+    <div className="flex flex-col h-screen bg-background text-foreground font-sans overflow-hidden">
       <Header />
       <main className="flex flex-1 overflow-hidden border-t border-border">
         {/* Desktop Layout */}
         <div className="hidden lg:flex flex-1 overflow-hidden">
-          <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} />
+          <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload} />
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
                   <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
                   <RightPanel />
               </div>
               <div className="h-[250px] flex flex-col border-t-2 border-border">
-                  <TimelineControls />
-                  <IterationTimeline />
+                  <TimelineControls totalDuration={totalDuration} />
+                  <Timeline clips={clips} totalDuration={totalDuration} />
               </div>
           </div>
         </div>
@@ -113,11 +141,11 @@ const ProVideoSuite: FC = () => {
                         <SheetTitle>AI Studio Tools</SheetTitle>
                     </SheetHeader>
                     <div className="flex-1 overflow-y-auto">
-                        <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} />
+                        <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload}/>
                         <RightPanel />
                         <div className="border-t-2 border-border">
-                            <TimelineControls />
-                            <IterationTimeline />
+                            <TimelineControls totalDuration={totalDuration} />
+                            <Timeline clips={clips} totalDuration={totalDuration} />
                         </div>
                     </div>
                 </SheetContent>

@@ -2,13 +2,14 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Camera, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { Camera, SlidersHorizontal, Palette } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '../ui/switch';
+import ColorGrading from '../color-grading';
 
 
 const ParameterControl: FC<{
@@ -51,7 +52,7 @@ const GenerationParameters = () => {
                 <CardDescription>Fine-tune the generation process for your video.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <ParameterControl label="Duration (seconds)" description="Set the total length of the video clip." value={duration} onValueChange={(v) => setDuration(v[0])} min={1} max={600} />
+                <ParameterControl label="Duration (seconds)" description="Set the total length of the video clip." value={duration} onValueChange={(v) => setDuration(v[0])} min={1} max={10} step={1} />
                 <ParameterControl label="Motion Amount" description="Controls the intensity of movement and animation." value={motion} onValueChange={(v) => setMotion(v[0])} />
                 <ParameterControl label="Temporal Consistency" description="Improves object and character stability over time." value={consistency} onValueChange={(v) => setConsistency(v[0])} />
                 <ParameterControl label="Prompt Adherence" description="How strictly the AI follows your text prompt." value={adherence} onValueChange={(v) => setAdherence(v[0])} />
@@ -70,7 +71,6 @@ const GenerationParameters = () => {
 }
 
 const CinematographyControls: FC = () => {
-     const [zoom, setZoom] = useState(0);
      const [dof, setDof] = useState(20);
 
     return (
@@ -114,7 +114,6 @@ const CinematographyControls: FC = () => {
                     </Select>
                 </div>
                  <ParameterControl label="Depth of Field" description="Blurs the background to focus on the subject." value={dof} onValueChange={(v) => setDof(v[0])} />
-                 <ParameterControl label="Zoom Control" description="Positive for zoom in, negative for zoom out." value={zoom} onValueChange={(v) => setZoom(v[0])} min={-100} max={100} />
             </CardContent>
         </Card>
     );
@@ -125,8 +124,8 @@ const RightPanel: FC = () => {
   return (
     <aside className="hidden lg:flex lg:w-[300px] bg-card flex-col lg:border-l lg:border-border">
        <div className="p-2">
-        <Tabs defaultValue="params">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue="params" className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="params">
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Parameters
@@ -135,12 +134,19 @@ const RightPanel: FC = () => {
               <Camera className="w-4 h-4 mr-2" />
               Camera
             </TabsTrigger>
+             <TabsTrigger value="color">
+              <Palette className="w-4 h-4 mr-2" />
+              Color & FX
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="params" className="mt-2">
             <GenerationParameters />
           </TabsContent>
           <TabsContent value="camera" className="mt-2">
             <CinematographyControls />
+          </TabsContent>
+          <TabsContent value="color" className="mt-2">
+            <ColorGrading />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,11 +1,22 @@
+'use client';
 import type { FC } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Play, Pause, Rewind, FastForward, Wand2, GitBranch } from 'lucide-react';
+import { Play, Pause, Rewind, FastForward, Wand2, GitBranch, ZoomIn, ZoomOut } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
+interface TimelineControlsProps {
+    totalDuration: number;
+}
 
-const TimelineControls: FC = () => {
+const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    const ms = Math.floor((seconds - Math.floor(seconds)) * 10);
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms}`;
+}
+
+const TimelineControls: FC<TimelineControlsProps> = ({ totalDuration }) => {
   return (
     <div className="flex items-center gap-1 p-2 border-b border-border bg-card">
       <TooltipProvider delayDuration={100}>
@@ -51,9 +62,24 @@ const TimelineControls: FC = () => {
           <TooltipContent><p>Regenerate Current Frame</p></TooltipContent>
         </Tooltip>
       </TooltipProvider>
+      <Separator orientation="vertical" className="h-6 mx-2" />
+       <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Zoom In"><ZoomIn className="w-5 h-5" /></Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Zoom In</p></TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Zoom Out"><ZoomOut className="w-5 h-5" /></Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Zoom Out</p></TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <div className="flex-1" />
-      <span className="text-xs font-mono text-muted-foreground">00:04.1 / 00:10.0</span>
+      <span className="text-xs font-mono text-muted-foreground">00:00.0 / {formatTime(totalDuration)}</span>
     </div>
   );
 };
