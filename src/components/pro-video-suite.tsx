@@ -68,7 +68,7 @@ const ProVideoSuite: FC = () => {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center text-white">
         <div className="relative">
-          <div className="absolute inset-0 bg-white/30 blur-3xl rounded-full animate-pulse" />
+          <div className="absolute inset-0 bg-primary/30 blur-3xl rounded-full animate-pulse" />
           <p className="relative text-lg font-light tracking-widest">Loading...</p>
         </div>
       </div>
