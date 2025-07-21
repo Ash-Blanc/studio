@@ -3,14 +3,14 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Text, Image as ImageIcon, Video, Bot, Sparkles, Loader2, Wand2 } from 'lucide-react';
+import { Bot, MessageSquare, Plus, Send } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '../ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface LeftPanelProps {
   onGenerate: () => void;
@@ -19,106 +19,81 @@ interface LeftPanelProps {
 
 const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
   const [prompt, setPrompt] = useState('');
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [videoPreview, setVideoPreview] = useState<string | null>(null);
-
-  const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleVideoFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setVideoPreview(URL.createObjectURL(file));
-    }
-  };
 
   return (
-    <aside className="w-[350px] bg-card flex flex-col border-r border-border">
-      <div className="flex-1 p-2 flex flex-col">
-        <Tabs defaultValue="text" className="flex flex-col flex-1">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="text"><Text className="w-4 h-4 mr-2" />Text</TabsTrigger>
-            <TabsTrigger value="image"><ImageIcon className="w-4 h-4 mr-2" />Image</TabsTrigger>
-            <TabsTrigger value="video"><Video className="w-4 h-4 mr-2" />Video</TabsTrigger>
-          </TabsList>
-          <div className="flex-1 mt-2">
-            <TabsContent value="text" className="h-full">
-              <Card className="border-0 shadow-none h-full flex flex-col">
-                <CardContent className="p-2 flex-1">
-                  <Textarea
-                    placeholder="An epic cinematic shot of a warrior queen on a mountain peak, golden hour lighting, 8K, hyperrealistic..."
-                    className="h-full resize-none text-base"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="image">
-              <Card className="border-0 shadow-none">
-                <CardContent className="p-2 space-y-4">
-                  <div className="aspect-video bg-muted/50 rounded-lg overflow-hidden flex items-center justify-center">
-                    {imagePreview ? (
-                      <Image src={imagePreview} width={300} height={169} alt="Image preview" className="w-full h-full object-cover"/>
-                    ) : (
-                      <div className="text-center text-muted-foreground p-4">
-                        <ImageIcon className="mx-auto h-12 w-12" />
-                        <p className="mt-2 text-sm">Upload an image</p>
-                      </div>
-                    )}
-                  </div>
-                  <Input id="image-upload" type="file" accept="image/*" onChange={handleImageFileChange} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="video">
-               <Card className="border-0 shadow-none">
-                <CardContent className="p-2 space-y-4">
-                  <div className="aspect-video bg-muted/50 rounded-lg overflow-hidden flex items-center justify-center">
-                    {videoPreview ? (
-                      <video src={videoPreview} controls className="w-full h-full" />
-                    ) : (
-                      <div className="text-center text-muted-foreground p-4">
-                        <Video className="mx-auto h-12 w-12" />
-                        <p className="mt-2 text-sm">Upload a video</p>
-                      </div>
-                    )}
-                  </div>
-                  <Input id="video-upload" type="file" accept="video/*" onChange={handleVideoFileChange} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </div>
-          <div className="p-2 space-y-4 border-t border-border mt-auto">
-             <div className="grid gap-2">
-                <Label htmlFor="model-select">AI Model</Label>
-                <Select defaultValue="aether-v3-pro">
-                    <SelectTrigger id="model-select">
-                        <SelectValue placeholder="Select a model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="aether-v3-pro">Aetheria v3 Pro</SelectItem>
-                        <SelectItem value="aether-v2-turbo">Aetheria v2 Turbo</SelectItem>
-                        <SelectItem value="veo-2.0">Google Veo 2.0</SelectItem>
-                        <SelectItem value="sora-2-pro">OpenAI Sora 2 Pro</SelectItem>
-                    </SelectContent>
-                </Select>
+    <aside className="w-[400px] bg-card flex flex-col border-r border-border p-4 gap-4">
+       <div className="flex items-center gap-2">
+         <Bot className="w-6 h-6 text-primary" />
+         <h2 className="text-lg font-headline font-bold">AI Assistant</h2>
+       </div>
+
+       <ScrollArea className="flex-1 -mx-4">
+         <div className="px-4 py-2 space-y-6">
+            {/* Initial Message */}
+            <div className="flex items-start gap-3">
+                <div className="p-2 bg-primary/20 rounded-full">
+                    <Bot className="w-5 h-5 text-primary"/>
+                </div>
+                <div className="p-3 rounded-lg bg-muted max-w-[80%]">
+                    <p className="text-sm">Welcome to Aetheria Studio! How can I help you create today? You can describe a scene, upload an image, or even provide a video to transform.</p>
+                </div>
             </div>
-            <Button onClick={onGenerate} disabled={isLoading} size="lg" className="w-full">
-              {isLoading ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              ) : (
-                <Wand2 className="mr-2 h-5 w-5" />
-              )}
-              {isLoading ? 'Generating...' : 'Generate'}
-            </Button>
-          </div>
-        </Tabs>
-      </div>
+             {/* User Message Example */}
+             <div className="flex items-start gap-3 justify-end">
+                <div className="p-3 rounded-lg bg-primary text-primary-foreground max-w-[80%]">
+                    <p className="text-sm">An epic cinematic shot of a warrior queen on a mountain peak, golden hour lighting, 8K, hyperrealistic...</p>
+                </div>
+            </div>
+         </div>
+       </ScrollArea>
+       
+       <div className="mt-auto space-y-2">
+         <div className="relative">
+            <Textarea
+                placeholder="Ask Aetheria..."
+                className="h-12 resize-none pr-24 pl-10"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    onGenerate();
+                  }
+                }}
+            />
+             <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                         <Button variant="ghost" size="icon" className="absolute left-1 top-1/2 -translate-y-1/2 h-8 w-8">
+                            <Plus className="w-4 h-4" />
+                         </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top"><p>Add Media</p></TooltipContent>
+                </Tooltip>
+             </TooltipProvider>
+
+            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MessageSquare className="w-4 h-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Chat Mode</p></TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <Button 
+                    size="sm" 
+                    className="h-8"
+                    onClick={onGenerate}
+                    disabled={isLoading || !prompt}
+                >
+                    <Send className="w-4 h-4" />
+                </Button>
+            </div>
+         </div>
+       </div>
     </aside>
   );
 };
