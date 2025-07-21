@@ -69,7 +69,7 @@ const GenerationParameters = () => {
     )
 }
 
-const CinematographyControls = () => {
+const CinematographyControls: FC = () => {
      const [zoom, setZoom] = useState(0);
      const [dof, setDof] = useState(20);
 
