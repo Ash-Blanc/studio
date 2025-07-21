@@ -21,13 +21,13 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
   const [prompt, setPrompt] = useState('');
 
   return (
-    <aside className="w-[400px] bg-card flex flex-col border-r border-border p-4 gap-4">
+    <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border p-4 gap-4">
        <div className="flex items-center gap-2">
          <Bot className="w-6 h-6 text-primary" />
          <h2 className="text-lg font-headline font-bold">AI Assistant</h2>
        </div>
 
-       <ScrollArea className="flex-1 -mx-4">
+       <ScrollArea className="flex-1 -mx-4 h-64 lg:h-auto">
          <div className="px-4 py-2 space-y-6">
             {/* Initial Message */}
             <div className="flex items-start gap-3">

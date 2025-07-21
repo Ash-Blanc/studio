@@ -17,18 +17,18 @@ const Header: FC = () => {
         </h1>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="ghost">
+        <Button variant="ghost" className="hidden sm:inline-flex">
           <Share2 className="w-4 h-4 mr-2" />
           Share
         </Button>
         <ExportDialog>
           <Button>
             <Download className="w-4 h-4 mr-2" />
-            Export
+            <span className="hidden sm:inline">Export</span>
           </Button>
         </ExportDialog>
-        <Separator orientation="vertical" className="h-6" />
-        <Avatar>
+        <Separator orientation="vertical" className="h-6 hidden sm:block" />
+        <Avatar className="hidden sm:flex">
           <AvatarImage src="https://placehold.co/40x40" alt="User" data-ai-hint="woman portrait" />
           <AvatarFallback>
             <User className="text-muted-foreground" />

@@ -101,7 +101,7 @@ const CinematographyControls = () => {
                     <Select defaultValue="cinematic">
                         <SelectTrigger id="lighting-style">
                             <SelectValue placeholder="Select style" />
-                        </SelectTrigger>
+                        </Trigger>
                         <SelectContent>
                             <SelectItem value="cinematic">Cinematic</SelectItem>
                             <SelectItem value="golden-hour">Golden Hour</SelectItem>
@@ -121,7 +121,7 @@ const CinematographyControls = () => {
 
 const RightPanel: FC = () => {
   return (
-    <aside className="w-[300px] bg-card flex flex-col border-l border-border">
+    <aside className="hidden lg:flex lg:w-[300px] bg-card flex-col lg:border-l lg:border-border">
        <div className="p-2">
         <Tabs defaultValue="params">
           <TabsList className="grid w-full grid-cols-2">
