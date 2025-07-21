@@ -48,11 +48,12 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
        </ScrollArea>
        
        <div className="mt-auto space-y-2">
-         <div className="relative">
+         <div className="relative flex items-center">
             <Textarea
                 placeholder="Ask Aetheria..."
-                className="h-12 resize-none pr-24 pl-10"
+                className="w-full resize-none pr-28 pl-10 py-3"
                 value={prompt}
+                rows={1}
                 onChange={(e) => setPrompt(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -64,7 +65,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
              <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                         <Button variant="ghost" size="icon" className="absolute left-1 top-1/2 -translate-y-1/2 h-8 w-8">
+                         <Button variant="ghost" size="icon" className="absolute left-1.5 top-1/2 -translate-y-1/2 h-8 w-8">
                             <Plus className="w-4 h-4" />
                          </Button>
                     </TooltipTrigger>
@@ -72,7 +73,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
                 </Tooltip>
              </TooltipProvider>
 
-            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
+            <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center">
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -85,7 +86,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
                 </TooltipProvider>
                 <Button 
                     size="sm" 
-                    className="h-8"
+                    className="h-8 w-8 p-0"
                     onClick={onGenerate}
                     disabled={isLoading || !prompt}
                 >
