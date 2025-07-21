@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Generates a video based on a text prompt using Veo.
+ * @fileOverview Generates a video from a text prompt by first creating an image and then animating it.
  *
  * - generateVideo - A function that handles the video generation process.
  * - GenerateVideoInput - The input type for the generateVideo function.
@@ -10,6 +10,7 @@
 import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/googleai';
 import { z } from 'genkit';
+import { generateImage } from './generate-image-flow';
 
 const GenerateVideoInputSchema = z.object({
   prompt: z.string().describe('The text prompt to generate the video from.'),
@@ -33,9 +34,19 @@ const generateVideoFlow = ai.defineFlow(
     outputSchema: GenerateVideoOutputSchema,
   },
   async (input) => {
+    // Step 1: Generate the initial image from the prompt.
+    const imageResult = await generateImage({ prompt: input.prompt });
+    const imageUrl = imageResult.imageUrl;
+
+    // Step 2: Use the generated image to create the video.
+    const imageToVideoPrompt = [
+        { text: 'Animate this image subtly and cinematically. ' + input.prompt },
+        { media: { url: imageUrl, contentType: 'image/png' } }
+    ];
+
     let { operation } = await ai.generate({
-      model: googleAI.model('veo-2.0-generate-001'),
-      prompt: input.prompt,
+      model: googleAI.model('veo-3.0-generate-preview'),
+      prompt: imageToVideoPrompt,
       config: {
         durationSeconds: input.durationSeconds,
         aspectRatio: '16:9',

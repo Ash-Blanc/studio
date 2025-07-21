@@ -21,9 +21,10 @@ const ProVideoSuite: FC = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
+    // Simulate initial asset loading
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 1500); // Show initial loading for 1.5 seconds
+    }, 1500); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -54,26 +55,28 @@ const ProVideoSuite: FC = () => {
       });
     } catch (error) {
       console.error('Video generation failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
       toast({
         variant: 'destructive',
         title: '❌ Generation Failed',
-        description: 'Something went wrong. Please check the console for details and try again.',
+        description: errorMessage,
       });
     } finally {
       setIsGenerating(false);
     }
   };
-
+  
   if (isInitialLoading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center text-white">
-        <div className="relative">
-          <div className="absolute inset-0 bg-primary/30 blur-3xl rounded-full animate-pulse" />
-          <p className="relative text-lg font-light tracking-widest">Loading...</p>
+        <div className="relative w-full h-full flex items-center justify-center">
+          <div className="absolute w-48 h-48 bg-white/10 rounded-full blur-3xl animate-pulse" />
+          <p className="relative text-lg font-light tracking-widest text-white/70">Loading...</p>
         </div>
       </div>
     );
   }
+
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground font-body overflow-hidden">
