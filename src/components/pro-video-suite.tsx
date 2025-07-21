@@ -11,20 +11,50 @@ import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { PanelLeft } from 'lucide-react';
+import { generateVideo } from '@/ai/flows/generate-video-flow';
+import { useToast } from '@/hooks/use-toast';
 
 const ProVideoSuite: FC = () => {
+  const { toast } = useToast();
   const [videoInfo, setVideoInfo] = useState<{ src: string, duration: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGenerate = () => {
+  const handleGenerate = async (prompt: string) => {
     setIsLoading(true);
-    setVideoInfo(null); // Clear previous video
-    // Simulate generation time
-    setTimeout(() => {
-      setVideoInfo({ src: '/generated-video.mp4', duration: 10 });
+    setVideoInfo(null);
+    
+    toast({
+      title: '🚀 Generation Started',
+      description: 'Your video is being created. This may take a minute or two...',
+    });
+
+    try {
+      const result = await generateVideo({ prompt });
+      // Create a temporary video element to get the duration
+      const videoElement = document.createElement('video');
+      videoElement.onloadedmetadata = () => {
+        setVideoInfo({ src: result.videoUrl, duration: videoElement.duration });
+      };
+      videoElement.src = result.videoUrl;
+
+      toast({
+        variant: 'default',
+        className: "bg-green-600/20 border-green-500",
+        title: '✅ Generation Complete!',
+        description: 'Your masterpiece is ready.',
+      });
+    } catch (error) {
+      console.error('Video generation failed:', error);
+      toast({
+        variant: 'destructive',
+        title: '❌ Generation Failed',
+        description: 'Something went wrong. Please check the console for details and try again.',
+      });
+    } finally {
       setIsLoading(false);
-    }, 4000);
+    }
   };
+
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground font-body overflow-hidden">

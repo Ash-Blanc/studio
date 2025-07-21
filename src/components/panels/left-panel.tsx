@@ -13,12 +13,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ScrollArea } from '../ui/scroll-area';
 
 interface LeftPanelProps {
-  onGenerate: () => void;
+  onGenerate: (prompt: string) => void;
   isLoading: boolean;
 }
 
 const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
   const [prompt, setPrompt] = useState('');
+
+  const handleGenerate = () => {
+    if (prompt.trim()) {
+      onGenerate(prompt);
+    }
+  };
 
   return (
     <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border p-4 gap-4">
@@ -58,7 +64,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    onGenerate();
+                    handleGenerate();
                   }
                 }}
             />
@@ -87,7 +93,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
                 <Button 
                     size="sm" 
                     className="h-8 w-8 p-0"
-                    onClick={onGenerate}
+                    onClick={handleGenerate}
                     disabled={isLoading || !prompt}
                 >
                     <Send className="w-4 h-4" />

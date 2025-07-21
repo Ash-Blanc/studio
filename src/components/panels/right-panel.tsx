@@ -102,7 +102,7 @@ const CinematographyControls: FC = () => {
                     <Select defaultValue="cinematic">
                         <SelectTrigger id="lighting-style">
                             <SelectValue placeholder="Select style" />
-                        </Trigger>
+                        </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="cinematic">Cinematic</SelectItem>
                             <SelectItem value="golden-hour">Golden Hour</SelectItem>
