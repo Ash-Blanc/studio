@@ -48,18 +48,18 @@ const GenerationParameters = () => {
         <Card className="border-0 shadow-none">
             <CardHeader>
                 <CardTitle className="text-lg font-headline flex items-center"><SlidersHorizontal className="mr-2 h-5 w-5"/> Parameters</CardTitle>
-                <CardDescription>Fine-tune the generation process.</CardDescription>
+                <CardDescription>Fine-tune the generation process for your video.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <ParameterControl label="Duration (seconds)" value={duration} onValueChange={(v) => setDuration(v[0])} min={1} max={600} />
-                <ParameterControl label="Motion Amount" description="Controls the intensity of movement." value={motion} onValueChange={(v) => setMotion(v[0])} />
-                <ParameterControl label="Temporal Consistency" description="Maintains object and character identity over time." value={consistency} onValueChange={(v) => setConsistency(v[0])} />
-                <ParameterControl label="Prompt Adherence" description="How strictly the AI follows your prompt." value={adherence} onValueChange={(v) => setAdherence(v[0])} />
+                <ParameterControl label="Duration (seconds)" description="Set the total length of the video clip." value={duration} onValueChange={(v) => setDuration(v[0])} min={1} max={600} />
+                <ParameterControl label="Motion Amount" description="Controls the intensity of movement and animation." value={motion} onValueChange={(v) => setMotion(v[0])} />
+                <ParameterControl label="Temporal Consistency" description="Improves object and character stability over time." value={consistency} onValueChange={(v) => setConsistency(v[0])} />
+                <ParameterControl label="Prompt Adherence" description="How strictly the AI follows your text prompt." value={adherence} onValueChange={(v) => setAdherence(v[0])} />
                 <div className="flex items-center justify-between space-x-2 pt-2">
                     <Label htmlFor="physics-sim" className="flex flex-col space-y-1">
                         <span>Physics Simulation</span>
                         <span className="font-normal leading-snug text-muted-foreground text-xs">
-                        Enable realistic physical interactions.
+                        Enable for more realistic physical interactions.
                         </span>
                     </Label>
                     <Switch id="physics-sim" defaultChecked />
@@ -77,7 +77,7 @@ const CinematographyControls: FC = () => {
         <Card className="border-0 shadow-none">
             <CardHeader>
                 <CardTitle className="text-lg font-headline flex items-center"><Camera className="mr-2 h-5 w-5"/>Cinematography</CardTitle>
-                <CardDescription>Control camera movement and lens effects.</CardDescription>
+                <CardDescription>Control camera work and professional lens effects.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                  <div className="grid gap-2">
@@ -92,8 +92,8 @@ const CinematographyControls: FC = () => {
                             <SelectItem value="pan-right">Pan Right</SelectItem>
                             <SelectItem value="tilt-up">Tilt Up</SelectItem>
                             <SelectItem value="tilt-down">Tilt Down</SelectItem>
-                             <SelectItem value="dolly-in">Dolly In</SelectItem>
-                             <SelectItem value="dolly-out">Dolly Out</SelectItem>
+                             <SelectItem value="dolly-in">Dolly In (Zoom)</SelectItem>
+                             <SelectItem value="dolly-out">Dolly Out (Zoom)</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -106,14 +106,15 @@ const CinematographyControls: FC = () => {
                         <SelectContent>
                             <SelectItem value="cinematic">Cinematic</SelectItem>
                             <SelectItem value="golden-hour">Golden Hour</SelectItem>
-                            <SelectItem value="noir">Noir</SelectItem>
+                            <SelectItem value="noir">Film Noir</SelectItem>
                             <SelectItem value="sci-fi-glow">Sci-fi Glow</SelectItem>
                             <SelectItem value="natural">Natural</SelectItem>
+                             <SelectItem value="product">Product Studio</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-                 <ParameterControl label="Depth of Field" description="Controls background blur amount." value={dof} onValueChange={(v) => setDof(v[0])} />
-                 <ParameterControl label="Zoom" description="Positive for zoom in, negative for out." value={zoom} onValueChange={(v) => setZoom(v[0])} min={-100} max={100} />
+                 <ParameterControl label="Depth of Field" description="Blurs the background to focus on the subject." value={dof} onValueChange={(v) => setDof(v[0])} />
+                 <ParameterControl label="Zoom Control" description="Positive for zoom in, negative for zoom out." value={zoom} onValueChange={(v) => setZoom(v[0])} min={-100} max={100} />
             </CardContent>
         </Card>
     );

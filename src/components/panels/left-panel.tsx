@@ -28,7 +28,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading }) => {
        <div className="mt-auto">
          <div className="relative">
             <Textarea
-                placeholder="Ask..."
+                placeholder="Describe your video scene, or enter a script..."
                 className="w-full resize-none pr-12 pl-10 py-3 min-h-[52px] rounded-2xl"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}

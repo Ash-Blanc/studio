@@ -36,8 +36,8 @@ const VideoPreview: FC<VideoPreviewProps> = ({ src, isLoading }) => {
           />
           <div className="absolute flex flex-col items-center justify-center text-center p-8">
              <SparklesIcon className="w-16 h-16 mb-4" />
-            <p className="font-headline text-2xl">Welcome to Aetheria Studio</p>
-            <p className="text-sm max-w-md">The future of cinematic AI video generation. Use the panels to describe your scene and start creating.</p>
+            <p className="font-headline text-2xl">Your AI Video Co-Pilot</p>
+            <p className="text-sm max-w-md">Create professional videos for your essays, products, or content. Just describe your vision to get started.</p>
           </div>
         </div>
       )}

@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Aetheria Studio | Next-Gen AI Video',
-  description: 'The future of cinematic AI video generation.',
+  title: 'Aetheria Studio | AI Video for Creators & Entrepreneurs',
+  description: 'The AI-powered video creation suite for essays, vlogs, product launches, and professional content.',
 };
 
 export default function RootLayout({

@@ -9,11 +9,11 @@ import { CheckCircle, Sparkles, GitBranch } from 'lucide-react';
 
 
 const iterations = [
-  { id: 1, name: 'Iteration 1', hint: 'warrior queen mountain', selected: false, isBranch: false },
-  { id: 2, name: 'Iteration 2', hint: 'warrior queen sunset', selected: false, isBranch: false },
-  { id: 3, name: 'V2 - Cinematic', hint: 'cinematic mountain sunset', selected: true, isBranch: true },
-  { id: 4, name: 'V2.1 - Added Dragon', hint: 'dragon sunset mountain', selected: false, isBranch: false },
-  { id: 5, name: 'V3 - More Epic', hint: 'epic fantasy battle', selected: false, isBranch: true },
+  { id: 1, name: 'Initial Concept', hint: 'laptop desk product', selected: false, isBranch: false },
+  { id: 2, name: 'V1.1 - Added Logo', hint: 'laptop desk with logo', selected: false, isBranch: false },
+  { id: 3, name: 'V2 - Cinematic', hint: 'cinematic product video', selected: true, isBranch: true },
+  { id: 4, name: 'V2.1 - User Testimonial', hint: 'person talking vlog', selected: false, isBranch: false },
+  { id: 5, name: 'V3 - Explainer', hint: 'animated chart explain', selected: false, isBranch: true },
 ];
 
 const IterationTimeline: FC = () => {
