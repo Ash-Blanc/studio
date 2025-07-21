@@ -1,3 +1,4 @@
+
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -72,8 +73,7 @@ const CinematographyControls = () => {
      const [zoom, setZoom] = useState(0);
      const [dof, setDof] = useState(20);
 
-    return (
-         <Card className="border-0 shadow-none">
+    return <Card className="border-0 shadow-none">
             <CardHeader>
                 <CardTitle className="text-lg font-headline flex items-center"><Camera className="mr-2 h-5 w-5"/>Cinematography</CardTitle>
                 <CardDescription>Control camera movement and lens effects.</CardDescription>
@@ -115,7 +115,6 @@ const CinematographyControls = () => {
                  <ParameterControl label="Zoom" description="Positive for zoom in, negative for out." value={zoom} onValueChange={(v) => setZoom(v[0])} min={-100} max={100} />
             </CardContent>
         </Card>
-    )
 }
 
 
