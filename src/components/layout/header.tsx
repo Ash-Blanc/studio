@@ -23,7 +23,7 @@ const Header: FC = () => {
           <Sparkles className="w-6 h-6 text-primary" />
         </div>
         <h1 className="text-xl font-headline font-bold text-foreground">
-          Vivid AI
+          Vividly
         </h1>
       </div>
       <div className="flex items-center gap-2">
