@@ -22,16 +22,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const action = isLogin ? login : signup;
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-xs">
         <form action={action}>
-            <CardHeader className="text-center">
-                <div className="mx-auto mb-2 p-2 bg-primary/20 rounded-lg w-fit">
-                    <Sparkles className="w-8 h-8 text-primary" />
+            <CardHeader className="text-center p-4">
+                <div className="mx-auto mb-2 p-1 bg-primary/20 rounded-lg w-fit">
+                    <Sparkles className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle className="text-2xl font-headline">{title}</CardTitle>
+                <CardTitle className="text-xl font-headline">{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
+            <CardContent className="grid gap-4 px-4">
                 <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" name="email" type="email" placeholder="m@example.com" required />
@@ -41,7 +41,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 <Input id="password" name="password" type="password" required />
                 </div>
             </CardContent>
-            <CardFooter className="flex flex-col gap-4">
+            <CardFooter className="flex flex-col gap-3 p-4">
                 <Button type="submit" className="w-full">{buttonText}</Button>
                  <div className="text-center text-sm text-muted-foreground">
                     {footerText}{' '}
