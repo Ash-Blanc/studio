@@ -1,9 +1,19 @@
 import type { FC } from 'react';
-import { Sparkles, Download, User, Share2 } from 'lucide-react';
+import { Sparkles, Download, User, Share2, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ExportDialog } from '@/components/export-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { logout } from './actions';
+
 
 const Header: FC = () => {
   return (
@@ -28,12 +38,31 @@ const Header: FC = () => {
           </Button>
         </ExportDialog>
         <Separator orientation="vertical" className="h-6 hidden sm:block" />
-        <Avatar className="hidden sm:flex">
-          <AvatarImage src="https://placehold.co/40x40" alt="User" data-ai-hint="woman portrait" />
-          <AvatarFallback>
-            <User className="text-muted-foreground" />
-          </AvatarFallback>
-        </Avatar>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Avatar className="hidden sm:flex cursor-pointer">
+                    <AvatarImage src="https://placehold.co/40x40" alt="User" data-ai-hint="woman portrait" />
+                    <AvatarFallback>
+                        <User className="text-muted-foreground" />
+                    </AvatarFallback>
+                </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <form action={logout}>
+                  <DropdownMenuItem asChild>
+                    <button type="submit" className="w-full">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </button>
+                  </DropdownMenuItem>
+                </form>
+            </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
