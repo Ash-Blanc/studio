@@ -164,8 +164,6 @@ const ProVideoSuite: FC = () => {
             <LeftPanel 
               onGenerate={handleGenerate} 
               isLoading={isGenerating} 
-              onScenesDetected={handleScenesDetected} 
-              onVideoUpload={handleVideoUpload}
               videoHistory={videoHistory}
               onSelectFromHistory={handleSelectFromHistory}
               onCollapse={() => setIsLeftPanelCollapsed(true)}
@@ -188,7 +186,11 @@ const ProVideoSuite: FC = () => {
                         </Tooltip>
                     </TooltipProvider>
                     ) : (
-                    <RightPanel onCollapse={() => setIsRightPanelCollapsed(true)} />
+                    <RightPanel 
+                      onCollapse={() => setIsRightPanelCollapsed(true)} 
+                      onScenesDetected={handleScenesDetected}
+                      onVideoUpload={handleVideoUpload}
+                    />
                     )}
               </div>
               <div className="h-[250px] flex flex-col border-t-2 border-border">
@@ -218,13 +220,15 @@ const ProVideoSuite: FC = () => {
                             <LeftPanel 
                                 onGenerate={handleGenerate} 
                                 isLoading={isGenerating} 
-                                onScenesDetected={handleScenesDetected} 
-                                onVideoUpload={handleVideoUpload}
                                 videoHistory={videoHistory}
                                 onSelectFromHistory={handleSelectFromHistory}
                                 onCollapse={() => {}} // Collapse not needed for mobile sheet view
                             />
-                            <RightPanel onCollapse={() => {}} />
+                            <RightPanel 
+                              onCollapse={() => {}} 
+                              onScenesDetected={handleScenesDetected}
+                              onVideoUpload={handleVideoUpload}
+                            />
                         </div>
                     </SheetContent>
                 </Sheet>

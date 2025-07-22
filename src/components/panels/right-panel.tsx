@@ -4,7 +4,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Camera, SlidersHorizontal, Palette, ChevronsRight } from 'lucide-react';
+import { Camera, SlidersHorizontal, Palette, ChevronsRight, Bot } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '../ui/switch';
 import ColorGrading from '../color-grading';
+import AiSceneDetector from '../ai-scene-detector';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 
@@ -125,9 +126,11 @@ const CinematographyControls: FC = () => {
 
 interface RightPanelProps {
   onCollapse: () => void;
+  onScenesDetected: (timestamps: number[]) => void;
+  onVideoUpload: (src: string, duration: number) => void;
 }
 
-const RightPanel: FC<RightPanelProps> = ({ onCollapse }) => {
+const RightPanel: FC<RightPanelProps> = ({ onCollapse, onScenesDetected, onVideoUpload }) => {
   return (
     <aside className="hidden lg:flex lg:w-[300px] bg-card flex-col lg:border-l lg:border-border relative">
       <TooltipProvider>
@@ -144,7 +147,7 @@ const RightPanel: FC<RightPanelProps> = ({ onCollapse }) => {
       </TooltipProvider>
       <div className="p-2 pt-12">
         <Tabs defaultValue="params" className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="params">
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Parameters
@@ -157,6 +160,10 @@ const RightPanel: FC<RightPanelProps> = ({ onCollapse }) => {
               <Palette className="w-4 h-4 mr-2" />
               Color & FX
             </TabsTrigger>
+            <TabsTrigger value="tools">
+                <Bot className="w-4 h-4 mr-2" />
+                Tools
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="params" className="mt-2">
             <GenerationParameters />
@@ -166,6 +173,9 @@ const RightPanel: FC<RightPanelProps> = ({ onCollapse }) => {
           </TabsContent>
           <TabsContent value="color" className="mt-2">
             <ColorGrading />
+          </TabsContent>
+          <TabsContent value="tools" className="mt-2">
+            <AiSceneDetector onScenesDetected={onScenesDetected} onVideoUpload={onVideoUpload}/>
           </TabsContent>
         </Tabs>
       </div>

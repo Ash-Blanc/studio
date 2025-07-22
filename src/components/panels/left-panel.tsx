@@ -15,8 +15,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 interface LeftPanelProps {
   onGenerate: (prompt: string) => void;
   isLoading: boolean;
-  onScenesDetected: (timestamps: number[]) => void;
-  onVideoUpload: (src: string, duration: number) => void;
   videoHistory: VideoHistoryItem[];
   onSelectFromHistory: (item: VideoHistoryItem) => void;
   onCollapse: () => void;
@@ -68,7 +66,7 @@ const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({
 };
 
 
-const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload, videoHistory, onSelectFromHistory, onCollapse }) => {
+const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, videoHistory, onSelectFromHistory, onCollapse }) => {
   return (
     <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border relative transition-all duration-300">
       <TooltipProvider>
@@ -86,7 +84,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected
 
       <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
         <div className="p-2 border-b border-border">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="prompt">
                 <FileText className="w-4 h-4 mr-2" />
                 Script
@@ -99,10 +97,6 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected
                 <Grid className="w-4 h-4 mr-2" />
                 Templates
             </TabsTrigger>
-            <TabsTrigger value="tools">
-                <Bot className="w-4 h-4 mr-2" />
-                Tools
-            </TabsTrigger>
             </TabsList>
         </div>
         <TabsContent value="prompt" className="flex-1">
@@ -113,9 +107,6 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected
         </TabsContent>
         <TabsContent value="templates">
             <TemplateLibrary />
-        </TabsContent>
-        <TabsContent value="tools">
-            <AiSceneDetector onScenesDetected={onScenesDetected} onVideoUpload={onVideoUpload}/>
         </TabsContent>
       </Tabs>
     </aside>
