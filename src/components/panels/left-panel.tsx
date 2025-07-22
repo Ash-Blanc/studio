@@ -90,7 +90,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, videoHistory, on
             </TabsTrigger>
              <TabsTrigger value="library">
                 <Library className="w-4 h-4 mr-2" />
-                Library
+                History
             </TabsTrigger>
             <TabsTrigger value="templates">
                 <Grid className="w-4 h-4 mr-2" />
@@ -101,7 +101,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, videoHistory, on
         <TabsContent value="prompt" className="flex-1">
           <GenerationPanel onGenerate={onGenerate} isLoading={isLoading} />
         </TabsContent>
-        <TabsContent value="library">
+        <TabsContent value="library" className="flex-1 overflow-hidden">
             <VideoLibrary history={videoHistory} onSelect={onSelectFromHistory} />
         </TabsContent>
         <TabsContent value="templates">
