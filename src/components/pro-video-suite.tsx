@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -10,9 +11,11 @@ import Timeline from '@/components/timeline/timeline';
 import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { PanelLeft } from 'lucide-react';
+import { PanelLeft, ChevronsUpDown } from 'lucide-react';
 import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
 
 const ProVideoSuite: FC = () => {
   const { toast } = useToast();
@@ -128,28 +131,39 @@ const ProVideoSuite: FC = () => {
         {/* Mobile/Tablet Layout */}
         <div className="lg:hidden flex-1 flex flex-col overflow-hidden">
           <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
-          <div className='p-2 border-t border-border'>
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                        <PanelLeft className="mr-2" />
-                        AI Tools & Timeline
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="bottom" className="h-[80vh] flex flex-col p-0">
-                    <SheetHeader className="p-4 border-b border-border">
-                        <SheetTitle>AI Studio Tools</SheetTitle>
-                    </SheetHeader>
-                    <div className="flex-1 overflow-y-auto">
-                        <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload}/>
-                        <RightPanel />
-                        <div className="border-t-2 border-border">
-                            <TimelineControls totalDuration={totalDuration} />
-                            <Timeline clips={clips} totalDuration={totalDuration} />
+           <div className="flex flex-col border-t border-border">
+             <div className='p-2'>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="outline" className="w-full">
+                            <PanelLeft className="mr-2" />
+                            Open AI Tools & Parameters
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[85vh] flex flex-col p-0">
+                        <SheetHeader className="p-4 border-b border-border">
+                            <SheetTitle>AI Studio Tools</SheetTitle>
+                        </SheetHeader>
+                        <div className="flex-1 overflow-y-auto">
+                            <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload}/>
+                            <RightPanel />
                         </div>
+                    </SheetContent>
+                </Sheet>
+             </div>
+              <Collapsible>
+                  <CollapsibleTrigger className="w-full">
+                      <div className='flex items-center justify-center p-2 border-t border-border bg-card text-muted-foreground'>
+                         <ChevronsUpDown className="w-4 h-4 mr-2" /> Show Timeline
+                      </div>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="h-[250px] flex flex-col border-t-2 border-border">
+                        <TimelineControls totalDuration={totalDuration} />
+                        <Timeline clips={clips} totalDuration={totalDuration} />
                     </div>
-                </SheetContent>
-            </Sheet>
+                  </CollapsibleContent>
+              </Collapsible>
           </div>
         </div>
       </main>
