@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster"
 export const metadata: Metadata = {
   title: 'Vividly | AI Video for Creators & Entrepreneurs',
   description: 'The AI-powered video creation suite for essays, vlogs, product launches, and professional content.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
