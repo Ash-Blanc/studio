@@ -6,7 +6,6 @@ import { Bot, FileText, Grid, Plus, ArrowUp, Library, ChevronsLeft } from 'lucid
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AiSceneDetector from '../ai-scene-detector';
 import TemplateLibrary from '../template-library';
 import VideoLibrary from '../video-library';
 import type { VideoHistoryItem } from '../pro-video-suite';
@@ -83,8 +82,8 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, videoHistory, on
       </TooltipProvider>
 
       <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
-        <div className="p-2 border-b border-border">
-            <TabsList className="grid w-full grid-cols-3">
+        <div className="p-2 border-b border-border pr-12">
+            <TabsList>
             <TabsTrigger value="prompt">
                 <FileText className="w-4 h-4 mr-2" />
                 Script
