@@ -31,13 +31,18 @@ export async function createSession(idToken: string) {
       path: "/",
     });
     
-    // Redirect after successful login
-    redirect("/studio");
-
   } catch (error) {
     console.error("Error creating session:", error);
     // You might want to handle this more gracefully
     return { success: false, error: "Failed to create session." };
+  }
+  
+  // Redirect after successful login
+  try {
+    redirect("/studio");
+  } catch(error) {
+    // This can happen in certain server-side contexts, return a success signal instead
+    return { success: true };
   }
 }
 
