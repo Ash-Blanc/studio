@@ -101,7 +101,7 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected
             </TabsTrigger>
             <TabsTrigger value="tools">
                 <Bot className="w-4 h-4 mr-2" />
-                AI Tools
+                Tools
             </TabsTrigger>
             </TabsList>
         </div>
