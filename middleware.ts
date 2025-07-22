@@ -1,28 +1,41 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { initializeApp, getApps } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
-// This is a placeholder for a real authentication check.
-// In a real app, you'd check a session cookie or token here.
-const isAuthenticated = (req: NextRequest) => {
-    // For demonstration purposes, we'll use a simple cookie check.
-    // In a real app, verify a JWT or session from a backend.
-    return req.cookies.has('auth_token');
+// Initialize Firebase Admin SDK
+if (!getApps().length) {
+  initializeApp();
 }
 
-export function middleware(request: NextRequest) {
+async function verifySessionCookie(cookie: string | undefined) {
+    if (!cookie) {
+        return false;
+    }
+    try {
+        await getAuth().verifySessionCookie(cookie, true);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const authToken = request.cookies.get('auth_token')?.value;
+  const isAuthenticated = await verifySessionCookie(authToken);
 
   // If the user is trying to access the studio but is not authenticated,
   // redirect them to the login page.
-  if (pathname.startsWith('/studio') && !isAuthenticated(request)) {
+  if (pathname.startsWith('/studio') && !isAuthenticated) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('next', pathname) // Optionally pass the original path
     return NextResponse.redirect(loginUrl)
   }
   
-  // If the user is authenticated and tries to visit login or signup,
+  // If the user is authenticated and tries to visit login, signup, or the root,
   // redirect them to the studio.
-  if (isAuthenticated(request) && (pathname === '/login' || pathname === '/signup' || pathname === '/')) {
+  if (isAuthenticated && (pathname === '/login' || pathname === '/signup' || pathname === '/')) {
       return NextResponse.redirect(new URL('/studio', request.url));
   }
 

@@ -2,35 +2,46 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { initializeApp, getApps } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
-// This is a placeholder for a real authentication function.
-// In a real application, you would use the Firebase Admin SDK or a similar
-// service to verify the user's credentials and create a session.
-async function authenticateUser(mode: "login" | "signup", data: FormData) {
-  const email = data.get("email");
-  console.log(`Attempting ${mode} for:`, email);
-
-  // Simulate a successful authentication
-  // In a real app, you would get a session token from your auth provider
-  const sessionToken = `fake-token-for-${email}-${Date.now()}`;
-
-  // Set a session cookie
-  cookies().set("auth_token", sessionToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24, // 24 hours
-    path: "/",
+// Initialize Firebase Admin SDK
+// This needs to be done once, so we check if it's already initialized.
+if (!getApps().length) {
+  initializeApp({
+    // Your Firebase Admin SDK config here, or it can be auto-inferred 
+    // from environment variables like GOOGLE_APPLICATION_CREDENTIALS
+    // when deployed on Google Cloud.
   });
-
-  return { success: true };
 }
 
-export async function login(formData: FormData) {
-  await authenticateUser("login", formData);
-  redirect("/studio");
+// This function takes the ID token from the client, verifies it,
+// and creates a session cookie.
+export async function createSession(idToken: string) {
+  try {
+    // Set session expiration to 5 days.
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
+    const sessionCookie = await getAuth().createSessionCookie(idToken, { expiresIn });
+
+    // Set the session cookie.
+    cookies().set("auth_token", sessionCookie, {
+      maxAge: expiresIn,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    });
+    
+    // Redirect after successful login
+    redirect("/studio");
+
+  } catch (error) {
+    console.error("Error creating session:", error);
+    // You might want to handle this more gracefully
+    return { success: false, error: "Failed to create session." };
+  }
 }
 
-export async function signup(formData: FormData) {
-  await authenticateUser("signup", formData);
-  redirect("/studio");
+export async function clearSession() {
+  cookies().delete("auth_token");
+  redirect("/login");
 }
