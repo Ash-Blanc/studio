@@ -41,7 +41,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 <Input id="password" name="password" type="password" required />
                 </div>
             </CardContent>
-            <CardFooter className="flex flex-col gap-2 p-4 pt-2">
+            <CardFooter className="flex flex-col gap-2 p-4 pt-0">
                 <Button type="submit" className="w-full">{buttonText}</Button>
                  <div className="text-center text-sm text-muted-foreground">
                     {footerText}{' '}
