@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Bot, FileText, Grid, Plus, ArrowUp, Library } from 'lucide-react';
+import { Bot, FileText, Grid, Plus, ArrowUp, Library, ChevronsLeft } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +10,7 @@ import AiSceneDetector from '../ai-scene-detector';
 import TemplateLibrary from '../template-library';
 import VideoLibrary from '../video-library';
 import type { VideoHistoryItem } from '../pro-video-suite';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 interface LeftPanelProps {
   onGenerate: (prompt: string) => void;
@@ -18,6 +19,7 @@ interface LeftPanelProps {
   onVideoUpload: (src: string, duration: number) => void;
   videoHistory: VideoHistoryItem[];
   onSelectFromHistory: (item: VideoHistoryItem) => void;
+  onCollapse: () => void;
 }
 
 const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({ onGenerate, isLoading }) => {
@@ -66,9 +68,22 @@ const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({
 };
 
 
-const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload, videoHistory, onSelectFromHistory }) => {
+const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload, videoHistory, onSelectFromHistory, onCollapse }) => {
   return (
-    <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border">
+    <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border relative transition-all duration-300">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 z-10" onClick={onCollapse}>
+              <ChevronsLeft className="w-5 h-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <p>Collapse Panel</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
         <div className="p-2 border-b border-border">
             <TabsList className="grid w-full grid-cols-4">

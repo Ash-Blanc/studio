@@ -11,10 +11,12 @@ import Timeline from '@/components/timeline/timeline';
 import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { PanelLeft, ChevronsUpDown } from 'lucide-react';
+import { PanelLeft, ChevronsUpDown, ChevronsRight } from 'lucide-react';
 import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 
 export interface VideoHistoryItem {
   id: string;
@@ -31,6 +33,7 @@ const ProVideoSuite: FC = () => {
   const [clips, setClips] = useState<any[]>([]);
   const [totalDuration, setTotalDuration] = useState(60);
   const [videoHistory, setVideoHistory] = useState<VideoHistoryItem[]>([]);
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
 
   useEffect(() => {
     // Simulate initial asset loading
@@ -142,14 +145,30 @@ const ProVideoSuite: FC = () => {
       <main className="flex flex-1 overflow-hidden border-t border-border">
         {/* Desktop Layout */}
         <div className="hidden lg:flex flex-1 overflow-hidden">
-          <LeftPanel 
-            onGenerate={handleGenerate} 
-            isLoading={isGenerating} 
-            onScenesDetected={handleScenesDetected} 
-            onVideoUpload={handleVideoUpload}
-            videoHistory={videoHistory}
-            onSelectFromHistory={handleSelectFromHistory}
-          />
+          {isLeftPanelCollapsed ? (
+             <TooltipProvider>
+                <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={() => setIsLeftPanelCollapsed(false)} className="m-2">
+                        <ChevronsRight className="w-5 h-5" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                    <p>Expand Panel</p>
+                </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <LeftPanel 
+              onGenerate={handleGenerate} 
+              isLoading={isGenerating} 
+              onScenesDetected={handleScenesDetected} 
+              onVideoUpload={handleVideoUpload}
+              videoHistory={videoHistory}
+              onSelectFromHistory={handleSelectFromHistory}
+              onCollapse={() => setIsLeftPanelCollapsed(true)}
+            />
+          )}
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
                   <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
@@ -186,6 +205,7 @@ const ProVideoSuite: FC = () => {
                                 onVideoUpload={handleVideoUpload}
                                 videoHistory={videoHistory}
                                 onSelectFromHistory={handleSelectFromHistory}
+                                onCollapse={() => {}} // Collapse not needed for mobile sheet view
                             />
                             <RightPanel />
                         </div>
