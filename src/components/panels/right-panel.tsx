@@ -1,8 +1,10 @@
 
+'use client';
+
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Camera, SlidersHorizontal, Palette } from 'lucide-react';
+import { Camera, SlidersHorizontal, Palette, ChevronsRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -10,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '../ui/switch';
 import ColorGrading from '../color-grading';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 
 const ParameterControl: FC<{
@@ -120,10 +123,26 @@ const CinematographyControls: FC = () => {
 };
 
 
-const RightPanel: FC = () => {
+interface RightPanelProps {
+  onCollapse: () => void;
+}
+
+const RightPanel: FC<RightPanelProps> = ({ onCollapse }) => {
   return (
-    <aside className="hidden lg:flex lg:w-[300px] bg-card flex-col lg:border-l lg:border-border">
-       <div className="p-2">
+    <aside className="hidden lg:flex lg:w-[300px] bg-card flex-col lg:border-l lg:border-border relative">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="absolute top-2 left-2 z-10" onClick={onCollapse}>
+              <ChevronsRight className="w-5 h-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Collapse Panel</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <div className="p-2 pt-12">
         <Tabs defaultValue="params" className="flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="params">

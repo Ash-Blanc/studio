@@ -11,7 +11,7 @@ import Timeline from '@/components/timeline/timeline';
 import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { PanelLeft, ChevronsUpDown, ChevronsRight } from 'lucide-react';
+import { PanelLeft, ChevronsUpDown, ChevronsRight, ChevronsLeft } from 'lucide-react';
 import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -34,6 +34,8 @@ const ProVideoSuite: FC = () => {
   const [totalDuration, setTotalDuration] = useState(60);
   const [videoHistory, setVideoHistory] = useState<VideoHistoryItem[]>([]);
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false);
+
 
   useEffect(() => {
     // Simulate initial asset loading
@@ -172,7 +174,22 @@ const ProVideoSuite: FC = () => {
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
                   <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
-                  <RightPanel />
+                   {isRightPanelCollapsed ? (
+                    <TooltipProvider>
+                        <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" onClick={() => setIsRightPanelCollapsed(false)} className="m-2">
+                                <ChevronsLeft className="w-5 h-5" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left">
+                            <p>Expand Panel</p>
+                        </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    ) : (
+                    <RightPanel onCollapse={() => setIsRightPanelCollapsed(true)} />
+                    )}
               </div>
               <div className="h-[250px] flex flex-col border-t-2 border-border">
                   <TimelineControls totalDuration={totalDuration} />
@@ -207,7 +224,7 @@ const ProVideoSuite: FC = () => {
                                 onSelectFromHistory={handleSelectFromHistory}
                                 onCollapse={() => {}} // Collapse not needed for mobile sheet view
                             />
-                            <RightPanel />
+                            <RightPanel onCollapse={() => {}} />
                         </div>
                     </SheetContent>
                 </Sheet>
