@@ -2,18 +2,22 @@
 
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Bot, FileText, Grid, Plus, ArrowUp } from 'lucide-react';
+import { Bot, FileText, Grid, Plus, ArrowUp, Library } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AiSceneDetector from '../ai-scene-detector';
 import TemplateLibrary from '../template-library';
+import VideoLibrary from '../video-library';
+import type { VideoHistoryItem } from '../pro-video-suite';
 
 interface LeftPanelProps {
   onGenerate: (prompt: string) => void;
   isLoading: boolean;
   onScenesDetected: (timestamps: number[]) => void;
   onVideoUpload: (src: string, duration: number) => void;
+  videoHistory: VideoHistoryItem[];
+  onSelectFromHistory: (item: VideoHistoryItem) => void;
 }
 
 const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({ onGenerate, isLoading }) => {
@@ -62,15 +66,19 @@ const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({
 };
 
 
-const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload }) => {
+const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected, onVideoUpload, videoHistory, onSelectFromHistory }) => {
   return (
     <aside className="w-full lg:w-[400px] bg-card flex flex-col lg:border-r lg:border-border">
       <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
         <div className="p-2 border-b border-border">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="prompt">
                 <FileText className="w-4 h-4 mr-2" />
                 Script
+            </TabsTrigger>
+             <TabsTrigger value="library">
+                <Library className="w-4 h-4 mr-2" />
+                Library
             </TabsTrigger>
             <TabsTrigger value="templates">
                 <Grid className="w-4 h-4 mr-2" />
@@ -84,6 +92,9 @@ const LeftPanel: FC<LeftPanelProps> = ({ onGenerate, isLoading, onScenesDetected
         </div>
         <TabsContent value="prompt" className="flex-1">
           <GenerationPanel onGenerate={onGenerate} isLoading={isLoading} />
+        </TabsContent>
+        <TabsContent value="library">
+            <VideoLibrary history={videoHistory} onSelect={onSelectFromHistory} />
         </TabsContent>
         <TabsContent value="templates">
             <TemplateLibrary />

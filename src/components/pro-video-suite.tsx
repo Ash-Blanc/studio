@@ -16,6 +16,12 @@ import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
+export interface VideoHistoryItem {
+  id: string;
+  src: string;
+  duration: number;
+  prompt: string;
+}
 
 const ProVideoSuite: FC = () => {
   const { toast } = useToast();
@@ -24,6 +30,7 @@ const ProVideoSuite: FC = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [clips, setClips] = useState<any[]>([]);
   const [totalDuration, setTotalDuration] = useState(60);
+  const [videoHistory, setVideoHistory] = useState<VideoHistoryItem[]>([]);
 
   useEffect(() => {
     // Simulate initial asset loading
@@ -50,6 +57,18 @@ const ProVideoSuite: FC = () => {
       track: 'video'
     }]);
   };
+  
+  const handleSelectFromHistory = (item: VideoHistoryItem) => {
+    setVideoInfo({ src: item.src, duration: item.duration });
+    setTotalDuration(item.duration);
+    setClips([{
+      id: item.id,
+      start: 0,
+      duration: item.duration,
+      name: item.prompt.substring(0, 30) + '...',
+      track: 'video',
+    }]);
+  }
 
   const handleGenerate = async (prompt: string) => {
     setIsGenerating(true);
@@ -66,10 +85,18 @@ const ProVideoSuite: FC = () => {
       const videoElement = document.createElement('video');
       videoElement.onloadedmetadata = () => {
         const duration = videoElement.duration;
+        const newHistoryItem: VideoHistoryItem = {
+          id: `vid_${Date.now()}`,
+          src: result.videoUrl,
+          duration,
+          prompt
+        };
+
         setVideoInfo({ src: result.videoUrl, duration });
         setTotalDuration(duration);
+        setVideoHistory(prev => [newHistoryItem, ...prev]);
         setClips([{
-          id: 'generated-video-1',
+          id: newHistoryItem.id,
           start: 0,
           duration: duration,
           name: prompt.substring(0, 30) + '...',
@@ -115,7 +142,14 @@ const ProVideoSuite: FC = () => {
       <main className="flex flex-1 overflow-hidden border-t border-border">
         {/* Desktop Layout */}
         <div className="hidden lg:flex flex-1 overflow-hidden">
-          <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload} />
+          <LeftPanel 
+            onGenerate={handleGenerate} 
+            isLoading={isGenerating} 
+            onScenesDetected={handleScenesDetected} 
+            onVideoUpload={handleVideoUpload}
+            videoHistory={videoHistory}
+            onSelectFromHistory={handleSelectFromHistory}
+          />
           <div className="flex-1 flex flex-col overflow-hidden">
               <div className='flex flex-1 overflow-hidden'>
                   <CenterPanel videoInfo={videoInfo} isLoading={isGenerating} />
@@ -145,7 +179,14 @@ const ProVideoSuite: FC = () => {
                             <SheetTitle>AI Studio Tools</SheetTitle>
                         </SheetHeader>
                         <div className="flex-1 overflow-y-auto">
-                            <LeftPanel onGenerate={handleGenerate} isLoading={isGenerating} onScenesDetected={handleScenesDetected} onVideoUpload={handleVideoUpload}/>
+                            <LeftPanel 
+                                onGenerate={handleGenerate} 
+                                isLoading={isGenerating} 
+                                onScenesDetected={handleScenesDetected} 
+                                onVideoUpload={handleVideoUpload}
+                                videoHistory={videoHistory}
+                                onSelectFromHistory={handleSelectFromHistory}
+                            />
                             <RightPanel />
                         </div>
                     </SheetContent>
