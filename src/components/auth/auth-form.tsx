@@ -55,8 +55,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         : await createUserWithEmailAndPassword(auth, email, password);
       
       const idToken = await userCredential.user.getIdToken();
-      await createSession(idToken);
-      // Redirect is handled by the server action
+      const result = await createSession(idToken);
+      if (!result?.success) {
+        // The server action might return an error if session creation fails
+         throw new Error(result?.error || "Could not create session.");
+      }
+      // Redirect is handled by the server action or by this client if needed
+      router.push('/studio');
     } catch (error: any) {
       console.error(error);
       toast({
@@ -74,8 +79,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     try {
         const result = await signInWithPopup(auth, provider);
         const idToken = await result.user.getIdToken();
-        await createSession(idToken);
-         // Redirect is handled by the server action
+        const sessionResult = await createSession(idToken);
+         if (!sessionResult?.success) {
+            throw new Error(sessionResult?.error || "Could not create session.");
+         }
+         // Redirect is handled by the server action or by this client if needed
+         router.push('/studio');
     } catch (error: any) {
         console.error(error);
         toast({
@@ -111,7 +120,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                     <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
+                    <span className="bg-card px-2 text-muted-foreground">
                     Or continue with
                     </span>
                 </div>

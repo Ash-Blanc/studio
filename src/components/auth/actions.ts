@@ -30,19 +30,12 @@ export async function createSession(idToken: string) {
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });
+    return { success: true };
     
   } catch (error) {
     console.error("Error creating session:", error);
     // You might want to handle this more gracefully
     return { success: false, error: "Failed to create session." };
-  }
-  
-  // Redirect after successful login
-  try {
-    redirect("/studio");
-  } catch(error) {
-    // This can happen in certain server-side contexts, return a success signal instead
-    return { success: true };
   }
 }
 
