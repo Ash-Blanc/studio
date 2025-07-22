@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Aetheria Studio | AI Video for Creators & Entrepreneurs',
+  title: 'Vivid AI | AI Video for Creators & Entrepreneurs',
   description: 'The AI-powered video creation suite for essays, vlogs, product launches, and professional content.',
 };
 
