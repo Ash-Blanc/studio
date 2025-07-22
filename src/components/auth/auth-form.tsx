@@ -97,7 +97,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 px-4">
-             <Button variant="outline" type="button" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading} className="w-full">
+             <Button size="sm" variant="outline" type="button" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading} className="w-full">
                 {isGoogleLoading ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
@@ -120,13 +120,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             <form onSubmit={handleAuthAction} className="grid gap-2">
                 <div className="grid gap-1">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading || isGoogleLoading}/>
+                    <Input id="email" name="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading || isGoogleLoading} className="h-9 text-sm" />
                 </div>
                 <div className="grid gap-1">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" name="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading || isGoogleLoading} />
+                    <Input id="password" name="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading || isGoogleLoading} className="h-9 text-sm" />
                 </div>
-                <Button type="submit" className="w-full mt-2" disabled={isLoading || isGoogleLoading}>
+                <Button size="sm" type="submit" className="w-full mt-2" disabled={isLoading || isGoogleLoading}>
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {buttonText}
                 </Button>
