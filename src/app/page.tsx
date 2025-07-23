@@ -54,17 +54,21 @@ export default function OnboardingPage() {
 
         {/* Video/Image Preview */}
         <section className="mt-16 px-4">
-          <div className="relative max-w-5xl mx-auto p-2 rounded-xl bg-gradient-to-tr from-primary/30 to-white/10 shadow-2xl">
-              <Image
-                src="https://placehold.co/1200x675"
-                alt="App Screenshot"
-                width={1200}
-                height={675}
-                className="rounded-lg"
-                data-ai-hint="futuristic video editor"
-              />
-          </div>
+            <div className="relative max-w-5xl mx-auto p-2 rounded-xl bg-gradient-to-tr from-primary/30 to-white/10 shadow-2xl">
+                <div className="relative aspect-video rounded-lg overflow-hidden">
+                    <video
+                        className="w-full h-full object-cover"
+                        src="https://cdn.dribbble.com/userupload/11183184/file/original-b9390ac7c2727144e53e7f91854291de.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
+                </div>
+            </div>
         </section>
+
 
         {/* Features Section */}
         <section className="mt-24 py-16 bg-background/50">
