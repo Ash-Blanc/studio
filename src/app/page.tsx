@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Video, Rocket, BookOpen } from 'lucide-react';
 import Image from 'next/image';
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border border-white/10 shadow-lg">
@@ -14,6 +16,12 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
 );
 
 export default function OnboardingPage() {
+  const { userId } = auth();
+
+  if (userId) {
+    redirect('/studio');
+  }
+
   return (
     <div className="w-full text-white">
       {/* Header */}
