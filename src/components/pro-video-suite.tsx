@@ -11,7 +11,7 @@ import Timeline from '@/components/timeline/timeline';
 import TimelineControls from '@/components/timeline/timeline-controls';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { PanelLeft, ChevronsUpDown, ChevronsRight, ChevronsLeft } from 'lucide-react';
+import { PanelLeft, ChevronsUpDown, ChevronsRight, ChevronsLeft, Sparkles } from 'lucide-react';
 import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -131,10 +131,13 @@ const ProVideoSuite: FC = () => {
   
   if (isInitialLoading) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center text-white">
+      <div className="fixed inset-0 bg-background flex items-center justify-center text-white">
         <div className="relative w-full h-full flex items-center justify-center">
-          <div className="absolute w-48 h-48 bg-white/10 rounded-full blur-3xl animate-pulse" />
-          <p className="relative text-lg font-light tracking-widest text-white/70">Loading...</p>
+          <div className="absolute w-48 h-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+           <div className="relative text-center">
+              <Sparkles className="h-12 w-12 mx-auto mb-4 animate-pulse text-primary" />
+              <p className="relative text-lg font-light tracking-widest text-white/70">Loading Studio...</p>
+           </div>
         </div>
       </div>
     );
