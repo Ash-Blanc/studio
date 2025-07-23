@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Bot, FileText, Grid, Plus, ArrowUp, Library, ChevronsLeft } from 'lucide-react';
+import { Bot, FileText, Grid, Plus, ArrowUp, Library, ChevronsLeft, Loader2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -56,7 +56,7 @@ const GenerationPanel: FC<Pick<LeftPanelProps, 'onGenerate' | 'isLoading'>> = ({
                 onClick={handleGenerate}
                 disabled={isLoading || !prompt.trim()}
             >
-                <ArrowUp className="w-5 h-5" />
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowUp className="w-5 h-5" />}
             </Button>
          </div>
        </div>

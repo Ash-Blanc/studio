@@ -57,10 +57,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
       const idToken = await userCredential.user.getIdToken();
       const result = await createSession(idToken);
       if (!result?.success) {
-        // The server action might return an error if session creation fails
          throw new Error(result?.error || "Could not create session.");
       }
-      // Redirect is handled by the server action or by this client if needed
       router.push('/studio');
     } catch (error: any) {
       console.error(error);
@@ -69,7 +67,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         title: "Authentication Failed",
         description: error.message || 'Please check your credentials and try again.',
       });
-      setIsLoading(false);
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -83,7 +82,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
          if (!sessionResult?.success) {
             throw new Error(sessionResult?.error || "Could not create session.");
          }
-         // Redirect is handled by the server action or by this client if needed
          router.push('/studio');
     } catch (error: any) {
         console.error(error);
@@ -92,21 +90,22 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             title: "Google Sign-In Failed",
             description: error.message || 'Could not sign in with Google. Please try again.',
         });
+    } finally {
         setIsGoogleLoading(false);
     }
   }
 
   return (
-    <Card className="w-full max-w-xs">
-        <CardHeader className="text-center p-4">
-            <div className="mx-auto mb-2 p-1 bg-primary/20 rounded-lg w-fit">
-                <Sparkles className="w-6 h-6 text-primary" />
+    <Card className="w-full max-w-sm">
+        <CardHeader className="text-center p-6">
+            <div className="mx-auto mb-4 p-2 bg-primary/20 rounded-full w-fit">
+                <Sparkles className="w-8 h-8 text-primary" />
             </div>
-            <CardTitle className="text-xl font-headline">{title}</CardTitle>
+            <CardTitle className="text-2xl font-headline">{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4 px-4">
-             <Button size="sm" variant="outline" type="button" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading} className="w-full">
+        <CardContent className="grid gap-4 px-6">
+             <Button variant="outline" type="button" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading} className="w-full">
                 {isGoogleLoading ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
@@ -129,19 +128,19 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             <form onSubmit={handleAuthAction} className="grid gap-2">
                 <div className="grid gap-1">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading || isGoogleLoading} className="h-9 text-sm" />
+                    <Input id="email" name="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading || isGoogleLoading} />
                 </div>
                 <div className="grid gap-1">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" name="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading || isGoogleLoading} className="h-9 text-sm" />
+                    <Input id="password" name="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading || isGoogleLoading} />
                 </div>
-                <Button size="sm" type="submit" className="w-full mt-2" disabled={isLoading || isGoogleLoading}>
+                <Button type="submit" className="w-full mt-2" disabled={isLoading || isGoogleLoading}>
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {buttonText}
                 </Button>
             </form>
         </CardContent>
-        <CardFooter className="flex flex-col gap-2 p-4 pt-0">
+        <CardFooter className="flex flex-col gap-2 p-6">
              <div className="text-center text-sm text-muted-foreground">
                 {footerText}{' '}
                 <Link href={footerLink} className="underline hover:text-primary">
