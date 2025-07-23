@@ -16,7 +16,7 @@ import { generateVideo } from '@/ai/flows/generate-video-flow';
 import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
+import { Progress } from '@/components/ui/progress';
 
 export interface VideoHistoryItem {
   id: string;
@@ -24,6 +24,31 @@ export interface VideoHistoryItem {
   duration: number;
   prompt: string;
 }
+
+const LoadingScreen: FC = () => {
+    const [progress, setProgress] = useState(13)
+ 
+    useEffect(() => {
+        const timer = setTimeout(() => setProgress(80), 500)
+        return () => clearTimeout(timer)
+    }, [])
+
+    return (
+        <div className="fixed inset-0 bg-background flex items-center justify-center text-white">
+            <div className="w-full max-w-xs text-center">
+                 <div className="mx-auto mb-6 h-20 w-20">
+                    <svg viewBox="0 0 100 100" className="w-full h-full animate-pulse">
+                        <path d="M10 10 L50 90 L90 10" stroke="hsl(var(--primary))" strokeWidth="10" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                 </div>
+                <h2 className="text-xl font-headline font-bold mb-2">Vividly Studio</h2>
+                <p className="text-muted-foreground mb-4">Preparing your creative workspace...</p>
+                <Progress value={progress} className="w-full h-2" />
+            </div>
+        </div>
+    );
+};
+
 
 const ProVideoSuite: FC = () => {
   const { toast } = useToast();
@@ -41,7 +66,7 @@ const ProVideoSuite: FC = () => {
     // Simulate initial asset loading
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 1500); 
+    }, 2000); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -130,17 +155,7 @@ const ProVideoSuite: FC = () => {
   };
   
   if (isInitialLoading) {
-    return (
-      <div className="fixed inset-0 bg-background flex items-center justify-center text-white">
-        <div className="relative w-full h-full flex items-center justify-center">
-          <div className="absolute w-48 h-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-           <div className="relative text-center">
-              <Sparkles className="h-12 w-12 mx-auto mb-4 animate-pulse text-primary" />
-              <p className="relative text-lg font-light tracking-widest text-white/70">Loading Studio...</p>
-           </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
 
